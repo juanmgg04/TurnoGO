@@ -1,0 +1,22 @@
+services:
+  web:
+    image: turno_go:latest
+    environment:
+      - /backend/config/.env
+    expose:
+      - 8000
+    ports:
+      - "8000:8000"
+      - "5000:5000"
+    volumes:
+      - ./backend:/app/backend  # Volumen para los archivos del backend
+      - ./database:/app/database  # Volumen para la base de datos
+      - ./config:/app/config # Volumen para los archivos de configuración
+    working_dir: /app
+    command: python3 /app/backend/app.py
+    networks:
+      - backend_network
+
+networks:
+  backend_network:
+    driver: bridge

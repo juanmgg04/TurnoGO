@@ -1,0 +1,14 @@
+flask
+django-environ==0.11.2
+Flask==3.0.3
+flask-marshmallow==1.2.1
+Flask-Migrate==4.0.7
+Flask-RESTful==0.3.10
+Flask-SQLAlchemy==3.1.1
+marshmallow-sqlalchemy==1.0.0
+numpy==2.1.3
+flask-mqtt
+weasyprint
+numpy
+flask-jwt-extended 
+werkzeug
