@@ -1,6 +1,7 @@
 services:
   web:
     image: turno_go:latest
+    restart: always
     environment:
       - /backend/config/.env
     expose:

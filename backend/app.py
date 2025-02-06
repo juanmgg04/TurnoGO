@@ -33,10 +33,15 @@ class Auth:
         
         if user and verify_password(user.password, data.get('password')):
             tokens = create_token(identity=user.id, additional_claims={
-                'role': user.role,
                 'email': user.email
             })
-            return jsonify(tokens), 200
+            role = models.Role.query.get(user.role)
+            
+            return jsonify({
+                "msg": "Login exitoso",
+                "tokens": tokens,
+                "role": role.serialize() if role else None
+            }), 200
         return jsonify({"msg": "Credenciales inválidas"}), 401
 
     @app.route('/register', methods=['POST'])
@@ -50,20 +55,25 @@ class Auth:
             name=data['name'],
             email=data['email'],
             password=hashed_pw,
-            role=1  # Asignar rol por defecto
+            role=2  # Asignar rol por defecto
         )
         models.db.session.add(new_user)
         models.db.session.commit()
         
-        return jsonify(new_user.serialize()), 201
+        return jsonify({
+            "msg": "Usuario creado correctamente",
+            "user": new_user.serialize()
+            }), 200
 
     # Ruta protegida de ejemplo
-    @app.route('/profile', methods=['GET'])
-    @jwt_required()
-    def profile():
-        current_user = get_jwt_identity()
-        user = models.User.query.get(current_user)
-        return jsonify(user.serialize())
+    @app.route('/profile/<int:id>', methods=['GET'])
+    # @jwt_required()
+    def profile(id):
+        user = models.User.query.get(id)
+        return jsonify({
+            "msg": "Perfil de usuario",
+            "user": user.serialize()
+        }), 200
     
     @app.route('/reset_password', methods=['POST'])
     @jwt_required()
