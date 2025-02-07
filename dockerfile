@@ -8,4 +8,4 @@ COPY requirements.txt .
 # Instalar las dependencias
 RUN pip install -r requirements.txt
 
-CMD ["python", "backend/app.py"]
+CMD ["python", "/app/backend/app.py"]
