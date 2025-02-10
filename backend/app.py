@@ -87,6 +87,37 @@ class Auth:
             return jsonify({"msg": "Contraseña actualizada"}), 200
         return jsonify({"msg": "Contraseña incorrecta"}), 401
     
+    @app.route('/delete_account/<int:id>', methods=['DELETE'])
+    @jwt_required()
+    def delete_account():
+        data = request.get_json()
+        user = models.User.query.get(id)
+        models.db.session.delete(user)
+        models.db.session.commit()
+
+        return jsonify({"msg": "Usuario eliminado"}), 200
+    
+    @app.route('/createadmin', methods=['POST'])
+    def create_admin():
+        data = request.get_json()
+        if models.User.query.filter_by(email=data['email']).first():
+            return jsonify({"msg": "El usuario ya existe"}), 400
+            
+        hashed_pw = hash_password(data['password'])
+        new_user = models.User(
+            name=data['name'],
+            email=data['email'],
+            password=hashed_pw,
+            role=1  # Asignar rol de administrador
+        )
+        models.db.session.add(new_user)
+        models.db.session.commit()
+        
+        return jsonify({
+            "msg": "Usuario creado correctamente",
+            "user": new_user.serialize()
+            }), 200
+    
 class Role:
     @app.route('/roles', methods=['GET'])
     def get_roles():
