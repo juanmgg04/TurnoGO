@@ -44,8 +44,9 @@ class AuthController:
                 "msg": "Login exitoso",
                 "tokens": tokens,
                 "user": {
-                    **user.serialize(),
-                    "role_name": role.name if role else None
+                    "id": user.id,
+                    "name": user.name,
+                    "role": role.name
                 }
             }), 200
         return jsonify({"msg": "Credenciales inválidas"}), 401
