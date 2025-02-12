@@ -120,6 +120,16 @@ class AppointmentController:
         
         # self._send_whatsapp_confirmation(new_appointment)
         return jsonify(new_appointment.serialize()), 201
+    
+    @app.route('/debug-token', methods=['POST'])
+    def debug_token():
+        token = request.json.get("token")
+        print(token)
+        try:
+            decoded = decode_token(token)
+            return jsonify(decoded), 200
+        except Exception as e:
+            return jsonify({"error": str(e)}), 400
 
     @app.route('/appointments', methods=['GET'])
     @jwt_required()

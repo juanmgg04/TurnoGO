@@ -27,7 +27,7 @@ def get_env() -> str:
     
 def create_token(identity, additional_claims=None):
     access_token = create_access_token(
-        identity=identity,
+        identity=str(identity),
         fresh=True,
         additional_claims=additional_claims or {},
         expires_delta=timedelta(minutes=15)
